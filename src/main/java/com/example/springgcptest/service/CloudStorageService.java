@@ -38,7 +38,8 @@ public class CloudStorageService {
         BlobId blobId = BlobId.of(bucketName, fileName);
         byte[] content = file.getBytes();
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
-        try (WriteChannel writer = storage.writer(blobInfo, Storage.BlobWriteOption.encryptionKey(encryptionKey))) {
+//        try (WriteChannel writer = storage.writer(blobInfo, Storage.BlobWriteOption.encryptionKey(encryptionKey))) {
+        try (WriteChannel writer = storage.writer(blobInfo)) {
             writer.write(ByteBuffer.wrap(content, 0, content.length));
         }
         return bucketName + "/" + fileName;
@@ -47,7 +48,8 @@ public class CloudStorageService {
     public void download(String fileName, OutputStream out) throws IOException {
 
         BlobId blobId = BlobId.of(bucketName, fileName);
-        try (ReadChannel reader = storage.reader(blobId, Storage.BlobSourceOption.decryptionKey(encryptionKey)); WritableByteChannel channel = Channels.newChannel(out)) {
+//        try (ReadChannel reader = storage.reader(blobId, Storage.BlobSourceOption.decryptionKey(encryptionKey)); WritableByteChannel channel = Channels.newChannel(out)) {
+        try (ReadChannel reader = storage.reader(blobId); WritableByteChannel channel = Channels.newChannel(out)) {
             ByteBuffer bytes = ByteBuffer.allocate(64 * 1024);
             while (reader.read(bytes) > 0) {
                 bytes.flip();
