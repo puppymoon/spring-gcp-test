@@ -18,6 +18,7 @@ import java.nio.channels.WritableByteChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static com.google.cloud.storage.Acl.Role.READER;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Slf4j
@@ -36,7 +37,7 @@ public class CloudStorageService {
         String fileName = file.getName();
         BlobId blobId = BlobId.of(bucketName, fileName);
         byte[] content = file.getBytes();
-        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
+        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").setAcl(Arrays.asList(Acl.of(Acl.User.ofAllUsers(), READER))).build();
         try (WriteChannel writer = storage.writer(blobInfo, Storage.BlobWriteOption.encryptionKey(encryptionKey))) {
             writer.write(ByteBuffer.wrap(content, 0, content.length));
         }
