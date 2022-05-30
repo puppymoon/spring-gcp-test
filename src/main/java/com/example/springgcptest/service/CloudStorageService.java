@@ -30,14 +30,14 @@ public class CloudStorageService {
 
     private static Storage storage = StorageOptions.getDefaultInstance().getService();
 
-    private static final String encryptionKey = "xxxxx_xxx_test";
+    private static final String encryptionKey = "xxxxxxxxtest";
 
     public String upload(MultipartFile file) throws IOException {
 
         String fileName = file.getName();
         BlobId blobId = BlobId.of(bucketName, fileName);
         byte[] content = file.getBytes();
-        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").setAcl(Arrays.asList(Acl.of(Acl.User.ofAllUsers(), READER))).build();
+        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
         try (WriteChannel writer = storage.writer(blobInfo, Storage.BlobWriteOption.encryptionKey(encryptionKey))) {
             writer.write(ByteBuffer.wrap(content, 0, content.length));
         }
