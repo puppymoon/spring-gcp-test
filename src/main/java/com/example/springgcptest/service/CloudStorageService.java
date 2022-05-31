@@ -1,5 +1,6 @@
 package com.example.springgcptest.service;
 
+import com.google.api.gax.paging.Page;
 import com.google.cloud.ReadChannel;
 import com.google.cloud.WriteChannel;
 import com.google.cloud.storage.*;
@@ -17,6 +18,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.google.cloud.storage.Acl.Role.READER;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -31,6 +33,24 @@ public class CloudStorageService {
     private static Storage storage = StorageOptions.getDefaultInstance().getService();
 
     private static final String encryptionKey = "xxxxxxxxtest";
+
+    public List<String> listBuckets() {
+        Page<Bucket> buckets = storage.list();
+        List<String> list = new ArrayList<>();
+        for (Bucket bucket : buckets.iterateAll()) {
+            list.add(bucket.getName());
+        }
+        return list;
+    }
+
+    public List<String> listObjects() {
+        Page<Blob> blobs = storage.list(bucketName);
+        List<String> list = new ArrayList<>();
+        for (Blob blob : blobs.iterateAll()) {
+            list.add(blob.getName());
+        }
+        return list;
+    }
 
     public String upload(MultipartFile file) throws IOException {
 

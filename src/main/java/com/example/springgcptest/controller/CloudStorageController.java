@@ -17,6 +17,7 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -31,6 +32,16 @@ public class CloudStorageController {
     private HttpServletResponse response;
 
     private CloudStorageService cloudStorageService;
+
+    @PostMapping("/listBuckets")
+    public List<String> listBuckets() {
+        return cloudStorageService.listBuckets();
+    }
+
+    @PostMapping("/listFiles")
+    public List<String> listFiles() {
+        return cloudStorageService.listObjects();
+    }
 
     @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String upload(@RequestPart MultipartFile file) {
