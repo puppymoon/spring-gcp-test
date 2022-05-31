@@ -34,7 +34,7 @@ public class CloudStorageService {
 
     public String upload(MultipartFile file) throws IOException {
 
-        String fileName = file.getName();
+        String fileName = file.getOriginalFilename();
         BlobId blobId = BlobId.of(bucketName, fileName);
         byte[] content = file.getBytes();
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
