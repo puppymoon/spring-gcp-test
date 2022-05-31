@@ -35,8 +35,7 @@ public class CloudStorageController {
     @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String upload(@RequestPart MultipartFile file) {
         try {
-            cloudStorageService.upload(file);
-            return "success";
+            return cloudStorageService.upload(file);
         } catch (IOException e) {
             log.error("ioex {}", e);
             return "fail";
